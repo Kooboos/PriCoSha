@@ -3,12 +3,15 @@ var mysql = require('mysql');
 var router = express.Router();
 var cors = require('cors');
 var app = express();
+import {createPerson} from './DatabaseQueries/createPerson.js';
+
+const databaseName = 'PriCoSha';
 
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'PriCoSha'
+    database: databaseName
 })
 
 connection.connect(function(error){
@@ -109,23 +112,42 @@ app.get('/api/removeAccount/:username/:password/:firstName/:lastName',function(r
     })
 });
 
-// app.use(cors({
-//     allowedOrigins: [
-//         'localhost', 'localhost:3000/login'
-//     ]
-// }))
+app.get('/api/checkForDatabase',function(request, response){
+    
+    const query = ("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" + databaseName + "'");
 
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-//   });
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with Query!');
+            console.log(error);
+        } else {
+            console.log('Successful Query!');
+            console.log('rows:', rows);
+            response.json({rows:rows});
+            
+        }
+    })
+});
 
+api/createDatabase
 
+app.get('/api/createDatabase',function(request, response){
+    
+    const query = ("CREATE DATABASE " + databaseName + ";");
 
-// app.get('/api/loginq/:username/:password', function(req, res){
-//     res.send(req.params.username);
-//     console.log(req.params.username);
-//     console.log(req.params.password);
-// })
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with Query!');
+            console.log(error);
+        } else {
+            console.log('Successful Query!');
+            console.log('rows:', rows);
+            response.json({status:'OK'});
+            
+        }
+    })
+});
+
 app.listen(5000);

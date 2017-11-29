@@ -6,4 +6,6 @@ Prerequisites:
 Must have Mysql installed on local machine.
 
 1) In directory with package.json file, type "npm start"
-2) In new terminal tab, type "node backend.js"
+    -This runs the react start script and the backend node server
+
+// "start": "react-scripts start | node ./backend.js",

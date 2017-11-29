@@ -16,14 +16,58 @@ class App extends Component {
     super(props);
     userDataMap.set(dataMapKeys.loginStatus, false);
     
+    this.checkForPriCoSha.bind(this);
   }
 
   checkForPriCoSha(){
-    
+    console.log('runningCheck');
+    fetch('http://localhost:5000/api/checkForDatabase', {
+      mode: "cors",
+      method: "GET"
+  }
+      ).then(response => {
+          console.log('response:', response);
+          response.json().then(json=>{
+              console.log('json:', json);
+              // If rows returned !== 0, then database exists, and we don't need to do anything
+              if(json.rows.length === 0){
+                  this.buildPriCoSha();
+              } else{
+              console.log('Database Present');           
+              }
+          })
+  })
+
   }
 
+  /*
+  Build Database by fetching multiple queries.
+  start with create Database named PriCoSha,
+  then build each table. 
+  */
   buildPriCoSha(){
+    const DatabaseCreationQuery = 'http://localhost:5000/api/createDatabase';
+    fetch(DatabaseCreationQuery, {
+      mode: "cors",
+      method: "GET"
+  }
+      ).then(response => {
+          response.json().then(json=>{
+                if(json.status === 'OK'){
+                  //continue
+                }
+                else{
+                  throw 'Error Creating Database';
+                }
+          })
+  })
 
+
+
+  .catch(function(reason) {
+    console.log('error:', reason);
+    window.alert('There has been an error building the database. Contact Santa Clause for Help.');
+ });
   }
 
 
