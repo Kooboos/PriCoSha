@@ -11,7 +11,7 @@ export class LoggedIn extends Component{
     render(){
         if(this.props.loggedIn === true){
             return(
-                <div>
+                <div id='LoggedInDiv'>
                     Logged in as: {userDataMap.get(dataMapKeys.firstName)} {userDataMap.get(dataMapKeys.lastName)}
                 </div>
             )

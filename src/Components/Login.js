@@ -16,9 +16,11 @@ export class Login extends Component{
     submitClicked(){
         //grab user and pass from fields
         const username = document.getElementById('usernameInput').value;
-        const passwordVal = document.getElementById('passwordInput').value;
-
-        const password = hash.sha256().update(passwordVal).digest('hex');
+        const password = document.getElementById('passwordInput').value;
+        
+        //use this following line when database gets modified to account for hashed values.
+        // const passwordVal = document.getElementById('passwordInput').value;
+        // const password = hash.sha256().update(passwordVal).digest('hex');
         console.log('user:', username);
         console.log('pass:', password);
 
@@ -70,7 +72,7 @@ export class Login extends Component{
         <label><b>Password</b></label>
         <input id='passwordInput' type="password" placeholder="Enter Password" name="psw"/>
     
-        <button type="submit" onClick={this.submitClicked.bind(this)}>Login</button>
+        <button id='BigGreenButton' type="submit" onClick={this.submitClicked.bind(this)}>Login</button>
       </div>
                 </div>
             );

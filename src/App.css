@@ -48,7 +48,7 @@ input[type=text], input[type=password] {
 }
 
 /* Set a style for all buttons */
-button {
+#BigGreenButton {
   background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
@@ -102,4 +102,10 @@ span.psw {
   .cancelbtn {
       width: 100%;
   }
+}
+
+#LoggedInDiv {
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 2px;
 }

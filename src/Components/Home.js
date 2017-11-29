@@ -5,8 +5,10 @@ import logo from '../logo.svg';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
 
 //Imported Components
-import {Followers} from './Followers.js';
 import {LoggedIn} from './LoggedIn.js';
+
+//Imported Methods
+import {logout} from './Logout.js';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -19,9 +21,16 @@ export class Home extends Component{
     constructor(props){
         super(props);
 
-        console.log('logged in???:', userDataMap.get(dataMapKeys.loginStatus));
+        this.state = {
+            loggedIn: userDataMap.get(dataMapKeys.loginStatus)
+        }
+
     }
     
+    logoutClicked(){
+        logout();
+        this.setState({loggedIn:false});
+    }
 
     render(){
         return(
@@ -43,7 +52,8 @@ export class Home extends Component{
                 <a href="/register" style={{marginLeft: '5px', marginRight: '5px'}}>Register</a>
               </span>
               <span>
-                <a href="/logout" style={{marginLeft: '5px', marginRight: '5px'}}>Logout</a>
+                  <button onClick={this.logoutClicked.bind(this)}>Logout</button>
+                {/* <a href="/logout" style={{marginLeft: '5px', marginRight: '5px'}}>Logout</a> */}
               </span>
               <span>
                 <a href="/remove_account" style={{marginLeft: '5px', marginRight: '5px'}}>Remove Account</a>
@@ -69,8 +79,6 @@ export class Home extends Component{
               <p>{line}</p>
             </div>
             
-            
-            <Followers/>
             
             
             </div>

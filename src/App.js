@@ -14,8 +14,10 @@ import {userDataMap, dataMapKeys} from './Components/UserDataMap.js';
 class App extends Component {
   constructor(props){
     super(props);
-    userDataMap.set(dataMapKeys.loginStatus, false);    
+    userDataMap.set(dataMapKeys.loginStatus, false);
+    
   }
+
 
   render() {
     return (

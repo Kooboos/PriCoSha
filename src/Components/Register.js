@@ -86,7 +86,7 @@ export class Register extends Component{
         <label><b>Last Name</b></label>
         <input id='lnameInput' type="text" placeholder="Last Name"/>
     
-        <button type="submit" onClick={this.submitClicked.bind(this)}>Register</button>
+        <button id='BigGreenButton' type="submit" onClick={this.submitClicked.bind(this)}>Register</button>
       </div>
                 </div>
             );
