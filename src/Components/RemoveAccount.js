@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
-import { Route, Redirect } from 'react-router'
+import { Route, Redirect } from 'react-router';
+import {logout} from './Logout.js';
 
 export class RemoveAccount extends Component{
     constructor(props){
@@ -16,36 +17,32 @@ export class RemoveAccount extends Component{
         //grab user and pass from fields
         const username = document.getElementById('usernameInput').value;
         const password = document.getElementById('passwordInput').value;
-        
-        //use this following line when database gets modified to account for hashed values.
-        // const passwordVal = document.getElementById('passwordInput').value;
+        const firstName = document.getElementById('fnameInput').value;
+        const lastName = document.getElementById('lnameInput').value;
+
         // const password = hash.sha256().update(passwordVal).digest('hex');
         console.log('user:', username);
         console.log('pass:', password);
 
-        const query = 'http://localhost:5000/api/loginQuery' + '/:' + username + '/:' + password;
-
-        fetch(query, {
+        const removeAccountQuery = 'http://localhost:5000/api/removeAccount' + '/:' + username + '/:' + password + '/:' + firstName + '/:' + lastName;
+        
+        fetch(removeAccountQuery, {
             mode: "cors",
             method: "GET"
         }
             ).then(response => {
+                console.log('response:', response);
                 response.json().then(json=>{
-                    //if it is not empty, go back to homepage, store username in global map
-                    if(!(json.rows.length === 0 && json.constructor === Object)){
-                        console.log('login successful');
-                        userDataMap.set(dataMapKeys.username, json.rows[0].username);
-                        userDataMap.set(dataMapKeys.firstName, json.rows[0].first_name);
-                        userDataMap.set(dataMapKeys.lastName, json.rows[0].last_name);
-                        userDataMap.set(dataMapKeys.loginStatus, true);
-
-                        //go back to homePage with new Info
-                        this.setState({loggedIn: true});
-                        // window.history.back();
+                    console.log('json:', json);
+                    // if status = deleted, then go back to home page. if not, stay on this page
+                    if(json.status === 'deleted'){
+                        console.log('Account removed');
+                        logout()
+                        this.setState({removingAccount: false});
 
                     } else {
-                        //show message saying that login was failed
-                        window.alert('Username or Password is incorrect, try again');
+                        //show message saying that removal was failed
+                        window.alert('Credentials are incorrect, try again');
                     }
                 })
         })

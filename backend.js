@@ -82,6 +82,33 @@ app.get('/api/registerUser/:username/:password/:firstName/:lastName',function(re
     })
 });
 
+app.get('/api/removeAccount/:username/:password/:firstName/:lastName',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    const password = "'" + (request.params.password).substr(1) + "'";
+    const firstName = "'" + (request.params.firstName).substr(1) + "'";
+    const lastName = "'" + (request.params.lastName).substr(1) + "'";
+    
+    const query = 'DELETE FROM `Person` WHERE username = '+ username + ' AND password = ' + password + ' AND first_name = ' + firstName + ' AND last_name = ' + lastName; 
+    console.log('removeAccountQuery:', query);
+    connection.query(query,
+    function(error, OkPacket){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            if(OkPacket.affectedRows === 0){
+                response.json({status: 'NOT_FOUND'});
+            }
+            else{
+                response.json({status:'deleted'});
+            }
+            
+            
+        }
+    })
+});
+
 // app.use(cors({
 //     allowedOrigins: [
 //         'localhost', 'localhost:3000/login'
