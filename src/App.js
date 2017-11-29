@@ -18,6 +18,14 @@ class App extends Component {
     
   }
 
+  checkForPriCoSha(){
+    
+  }
+
+  buildPriCoSha(){
+
+  }
+
 
   render() {
     return (

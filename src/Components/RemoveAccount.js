@@ -37,7 +37,7 @@ export class RemoveAccount extends Component{
                     // if status = deleted, then go back to home page. if not, stay on this page
                     if(json.status === 'deleted'){
                         console.log('Account removed');
-                        logout()
+                           logout()
                         this.setState({removingAccount: false});
 
                     } else {
