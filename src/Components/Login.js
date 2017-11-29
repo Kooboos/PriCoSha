@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
 import { Route, Redirect } from 'react-router'
+var hash = require('hash.js')
 
 export class Login extends Component{
     constructor(props){
@@ -11,26 +12,20 @@ export class Login extends Component{
         }
     }
 
+    
     submitClicked(){
         //grab user and pass from fields
         const username = document.getElementById('usernameInput').value;
-        const password = document.getElementById('passwordInput').value;
-        console.log('username:', username);
-        console.log('password:', password);
+        const passwordVal = document.getElementById('passwordInput').value;
 
+        const password = hash.sha256().update(passwordVal).digest('hex');
+        console.log('user:', username);
+        console.log('pass:', password);
 
-        const loginParameters = {
-            username:username,
-            password:password
-        };
-
-        // const headers = new Headers();
-        // console.log('headers:', headers);
         const query = 'http://localhost:5000/api/loginQuery' + '/:' + username + '/:' + password;
 
         fetch(query, {
             mode: "cors",
-            // credentials: 'include',
             method: "GET"
         }
             ).then(response => {
