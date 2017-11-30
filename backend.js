@@ -3,7 +3,6 @@ var mysql = require('mysql');
 var router = express.Router();
 var cors = require('cors');
 var app = express();
-import {createPerson} from './DatabaseQueries/createPerson.js';
 
 const databaseName = 'PriCoSha';
 
@@ -129,8 +128,6 @@ app.get('/api/checkForDatabase',function(request, response){
         }
     })
 });
-
-api/createDatabase
 
 app.get('/api/createDatabase',function(request, response){
     
