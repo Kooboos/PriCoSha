@@ -147,4 +147,86 @@ app.get('/api/createDatabase',function(request, response){
     })
 });
 
+app.get('/api/getFriendGroups/:username', function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'"
+    console.log(username);
+    const query = "SELECT group_name FROM `FriendGroup` WHERE username = " + username;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({rows:rows});
+            
+            
+        }
+    })
+})
+
+//Check to see if FriendGroup Exists
+app.get('/api/checkFriendGroups/:username/:groupName',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";
+
+    const query = "SELECT * FROM `FriendGroup` WHERE username = " + username + "AND group_name = " + groupName;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({rows:rows});
+            
+            
+        }
+    })
+});
+
+//Get the names of all friends who are part of this group
+app.get('/api/getFriendsFromGroups/:username/:groupName',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";
+
+    const query = "SELECT * FROM `Member` WHERE username_creator = " + username + "AND group_name = " + groupName;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({rows:rows});
+                      
+        }
+    })
+});
+
+//create group
+app.get('/api/createGroup/:groupName/:creator/:description',function(request, response){
+    
+    const creator = "'" + (request.params.creator).substr(1) + "'";
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";
+    const description = "'" + (request.params.description).substr(1) + "'";
+    const query = "INSERT INTO FriendGroup (group_name, username, description) VALUES ('"+groupName+"', '"+ creator+"', '"+ description+"')";
+    console.log('query:', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+
 app.listen(5000);

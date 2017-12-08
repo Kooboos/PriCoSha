@@ -1,0 +1,1 @@
+const export createPersonQuery = "CREATE TABLE Person(username VARCHAR (50), password VARCHAR (255), first_name VARCHAR (50), last_name VARCHAR (50), PRIMARY KEY (username)) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
