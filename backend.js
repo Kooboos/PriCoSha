@@ -207,7 +207,6 @@ app.get('/api/getFriendsFromGroups/:username/:groupName',function(request, respo
     })
 });
 
-//TODO FIX THIS FUCKING GOD DAMN QUERY FUUUUCK
 //create group
 app.get('/api/createGroup/:groupName/:creator/:description',function(request, response){
     
@@ -215,7 +214,6 @@ app.get('/api/createGroup/:groupName/:creator/:description',function(request, re
     const groupName = "'" + (request.params.groupName).substr(1) + "'";
     const description = "'" + (request.params.description).substr(1) + "'";
 
-    // const query = 'INSERT INTO `Person` (username, password, first_name, last_name) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +')';     
     const query = "INSERT INTO `FriendGroup` (group_name, username, description) VALUES ("+groupName+', '+ creator+', '+ description+")";
     
     console.log('query:', query);
@@ -226,6 +224,65 @@ app.get('/api/createGroup/:groupName/:creator/:description',function(request, re
             console.log('Problem with Query!');
         } else {
             console.log('Successful Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove group
+app.get('/api/removeGroup/:groupName/:creator',function(request, response){
+    
+    const creator = "'" + (request.params.creator).substr(1) + "'";
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";
+
+    const query = "DELETE FROM `FriendGroup` WHERE username = " + creator +" AND group_name = " + groupName;
+    
+    console.log('removing Group:', groupName);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//Add person to a FriendGroup
+app.get('/api/addFriendToGroup/:groupName/:creator/:userNames',function(request, response){
+    const creator = "'" + (request.params.creator).substr(1) + "'";
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";    
+    const groupMembers = request.params.userNames.split(',');
+    console.log('groupMembers:', groupMembers);
+
+    //construct query string to add to normal query string
+    let construct = '';
+
+    for(let i=0; i<groupMembers.length; i++){
+        if(i === 0){
+            construct = construct + '(' + "'" + groupMembers[i].substr(1) + "'" + ', ' + groupName + ', ' + creator + '), ';
+            
+        }
+        else{
+            construct = construct + '(' + "'" + groupMembers[i] + "'" + ', ' + groupName + ', ' + creator + '), ';    
+        }
+    }
+
+    const allValues = construct.substring(0, construct.length -2);
+
+    const query = "INSERT INTO `Member` (username, group_name, username_creator) VALUES " + allValues;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with Adding Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully Added Friends to group Query!');
             response.json({status:'OK'});
                       
         }

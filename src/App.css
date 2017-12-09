@@ -110,19 +110,16 @@ span.psw {
   border-radius: 2px;
 }
 
-#friendGroupLoginTrue{
-
-}
-
-#friendGroupLoginFalse{
-
-}
-
 #FriendGroupComponent{
   border-style: solid;
   border-width: 3px;
   width: 200px;
   height: 250px;
+}
+
+#friendGroupLoginContainer{
+  overflow-y: auto;
+  height:256px;
 }
 
 #FriendGroupButtons{

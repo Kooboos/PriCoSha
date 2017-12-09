@@ -1,5 +1,6 @@
 import {userDataMap, dataMapKeys} from '../Components/UserDataMap.js';
 import {checkForExistingFriendGroup} from './checkForExistingFriendGroup.js';
+import { addFriendsToGroup } from './addFriendsToGroup';
 
 export const createGroup = (groupName, userNames, description) => new Promise((resolve, reject) => {
  
@@ -22,9 +23,21 @@ export const createGroup = (groupName, userNames, description) => new Promise((r
                     ).then(response => {
                         response.json().then(json=>{
                             //This is the response after Creating Group. If status === 'OK', proceed with adding users to group
+                            console.log('groupCreatedQuery Ran:', json);
                             if(json.status === 'OK'){
                                 console.log('group created!!!');
                                 //Now we need to add all members from 'userNames' into friendGroup.
+
+                                addFriendsToGroup(groupName, userNames, creator).then(json => {
+                                    if(json === 'OK'){
+                                        console.log('resolving after AddingFriends');
+                                        resolve({status: json});
+                                    }
+                                    else{
+                                        console.log('something went Wrong. Speak to Santa Clause Please');
+                                        resolve({status: 'Failed'});
+                                    }
+                                })
 
                             }
                         }).catch(error => {
@@ -40,27 +53,5 @@ export const createGroup = (groupName, userNames, description) => new Promise((r
             alert('Cannot create FriendGroup, as it already exists!');
         }
     })
-
-
-    
-
-
-    //for each name in Username, send fetch query to server.
-
-
-    // const query = 'http://localhost:5000/api/getFriendsFromGroups/:' + groupName + '/:' + username;
-
-    // fetch(query, {
-    //     mode: "cors",
-    //     method: "GET"
-    // }
-    //     ).then(response => {
-    //         response.json().then(json=>{
-    //             //This is the response after getting all users from FriendGroup
-    //             resolve(json.rows);
-    //         }).catch(error => {
-    //             reject(error);
-    //         })
-    // })
     
 });

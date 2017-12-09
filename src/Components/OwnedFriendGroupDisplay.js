@@ -18,19 +18,27 @@ export class OwnedFriendGroupDisplay extends Component{
 
         if(this.state.loggedIn && this.props.friendGroups.length === 0){
             //prepare friendGroup stuff
-            queryFriendGroups(userDataMap.get(dataMapKeys.username)).then(list => {
-                //do something with list of names
-                console.log('list:', list);
-
-                this.setState({friendGroups: list});
-                if(list.length != 0){
-                    this.createHTMLTable();
-                    this.setState({isTableCreated: true});
-                }
-            })
-
+            
+            this.update();
 
         }
+    }
+
+    update(){
+        console.log('inside Update');
+        if(document.getElementById('friendGroupLogin') !== null){
+            document.getElementById('friendGroupLogin').innerHTML = "";
+        }
+        queryFriendGroups(userDataMap.get(dataMapKeys.username)).then(list => {
+            //do something with list of names
+            console.log('list:', list);
+
+            this.setState({friendGroups: list});
+            if(list.length != 0){
+                this.createHTMLTable();
+                this.setState({isTableCreated: true});
+            }
+        })
     }
 
     createHTMLTable() {
@@ -60,14 +68,19 @@ export class OwnedFriendGroupDisplay extends Component{
         for (let i = 0; i < this.state.friendGroups.length; i++) {
             let tr = document.createElement('TR');
             let td = document.createElement('TD')
-            td.appendChild(document.createTextNode(this.state.friendGroups[i]));
+            td.appendChild(document.createTextNode(this.state.friendGroups[i].group_name));
             tr.appendChild(td)
             tableBody.appendChild(tr);
         }  
         myTableDiv.appendChild(table)
     }
 
-    
+    componentWillReceiveProps(nextProps){
+        if(nextProps.operation === 'Refresh_FriendGroups'){
+            this.update();
+        }
+        this.props.finishOperation;
+    }
 
     render(){
         if(this.state.loggedIn){
@@ -81,9 +94,11 @@ export class OwnedFriendGroupDisplay extends Component{
             else{
                 //return all friendGroups in a list here
                 return(
-                    <div id='friendGroupLogin'>
-                        {/* display table here */}
-                        
+                    <div id='friendGroupLoginContainer'>
+                        <div id='friendGroupLogin'>
+                            {/* display table here */}
+                            
+                        </div>
                     </div>
                     
                 )

@@ -27,7 +27,8 @@ export class Home extends Component{
         console.log('Login Status:', userDataMap.get(dataMapKeys.loginStatus));
 
         this.state = {
-            loggedIn: userDataMap.get(dataMapKeys.loginStatus)
+            loggedIn: userDataMap.get(dataMapKeys.loginStatus),
+            operation: 'NO-OP'
         }
 
     }
@@ -36,6 +37,13 @@ export class Home extends Component{
         logout();
         this.setState({loggedIn:false});
     }
+
+
+    finishOperation(){
+        this.setState({operation:'NO-OP'});
+    }
+
+    
     
     addFriendGroupClicked(){
         if(this.state.loggedIn){
@@ -58,7 +66,10 @@ export class Home extends Component{
                     memberNames.push(splitMembers[i].trim());
                 }
 
-                createGroup(groupName, memberNames, description);
+                createGroup(groupName, memberNames, description).then(response=>{
+                    console.log('inside createGroup:', response);
+                    this.refreshFriendGroups();
+                });
 
 
             }
@@ -68,11 +79,20 @@ export class Home extends Component{
         }
     }
 
+    refreshFriendGroups(){
+        console.log('inside Home/Refreshgroups');
+        this.setState({operation:'Refresh_FriendGroups'})
+    }
+
     refreshFriendGroupsClicked(){
         if(this.setState.loggedIn){
             //refreshGroups
+            console.log('inside Home/Refreshgroups');
+            this.setState({operation:'Refresh_FriendGroups'})
         }
     }
+
+
 
     render(){
         return(
@@ -117,7 +137,11 @@ export class Home extends Component{
             </div>
                 <div>
                     <div id='FriendGroupComponent'>
-                        <OwnedFriendGroupDisplay friendGroups = {[]}/>
+                        <OwnedFriendGroupDisplay 
+                        friendGroups = {[]}
+                        operation = {this.state.operation}
+                        finishOperation = {this.finishOperation.bind(this)}
+                        />
                     </div>
                     
                     <div id='FriendGroupButtons'>
