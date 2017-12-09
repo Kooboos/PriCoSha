@@ -207,13 +207,17 @@ app.get('/api/getFriendsFromGroups/:username/:groupName',function(request, respo
     })
 });
 
+//TODO FIX THIS FUCKING GOD DAMN QUERY FUUUUCK
 //create group
 app.get('/api/createGroup/:groupName/:creator/:description',function(request, response){
     
     const creator = "'" + (request.params.creator).substr(1) + "'";
     const groupName = "'" + (request.params.groupName).substr(1) + "'";
     const description = "'" + (request.params.description).substr(1) + "'";
-    const query = "INSERT INTO FriendGroup (group_name, username, description) VALUES ('"+groupName+"', '"+ creator+"', '"+ description+"')";
+
+    // const query = 'INSERT INTO `Person` (username, password, first_name, last_name) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +')';     
+    const query = "INSERT INTO `FriendGroup` (group_name, username, description) VALUES ("+groupName+', '+ creator+', '+ description+")";
+    
     console.log('query:', query);
     connection.query(query,
     function(error, rows, fields){
