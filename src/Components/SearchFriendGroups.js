@@ -20,6 +20,12 @@ export class SearchFriendGroups extends Component{
         //query for all members in group -> groupName
         queryFriendsFromGroup(groupName, userDataMap.get(dataMapKeys.username)).then(json=>{
             console.log('this is the response from the query:', json);
+
+            let userList = []
+            for(let i = 0; i < json.length; i++){
+                userList.push(json[i].username);
+            }
+            alert('The following friends are part of ' + groupName + ': ' + userList);
         })
     }
 

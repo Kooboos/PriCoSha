@@ -12,6 +12,7 @@ import {SearchFriendGroups} from './SearchFriendGroups.js';
 //Imported Methods
 import {logout} from './Logout.js';
 import {createGroup} from '../Methods/createGroup.js';
+import { AddFriendsToFriendGroup } from './addFriendToFriendGroup';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -162,6 +163,10 @@ export class Home extends Component{
                     <div id='SearchFriendGroups'>
                         <SearchFriendGroups/>
                     </div>
+                    <div id='addFriendsToGroup'>
+                        <AddFriendsToFriendGroup/>
+                    </div>
+
 
                 </div>
             

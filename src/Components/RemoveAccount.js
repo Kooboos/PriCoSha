@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
 import { Route, Redirect } from 'react-router';
 import {logout} from './Logout.js';
+import {removeMeFromMembers} from '../Methods/removeMeFromMembers';
+import {removeMyFriendGroups} from '../Methods/removeMyFriendGroups';
+var hash = require('hash.js')
+
 
 export class RemoveAccount extends Component{
     constructor(props){
@@ -16,11 +20,26 @@ export class RemoveAccount extends Component{
     submitClicked(){
         //grab user and pass from fields
         const username = document.getElementById('usernameInput').value;
-        const password = document.getElementById('passwordInput').value;
+        const passwordVal = document.getElementById('passwordInput').value;
         const firstName = document.getElementById('fnameInput').value;
         const lastName = document.getElementById('lnameInput').value;
+        const password = hash.sha256().update(passwordVal).digest('hex');
+        console.log('first log');
 
-        // const password = hash.sha256().update(passwordVal).digest('hex');
+        removeMeFromMembers(username).then(response => {
+            if(response.status === 'OK'){
+                removeMyFriendGroups(username).then(response => {
+                    if(response.status === 'OK'){
+                        this.removeAccount(username, password, firstName, lastName);
+                    }
+                })
+            
+            }
+        })
+        
+    }
+
+    removeAccount(username, password, firstName, lastName){
         console.log('user:', username);
         console.log('pass:', password);
 
@@ -59,6 +78,7 @@ export class RemoveAccount extends Component{
                 <div>
                     <div>In order to remove your account, all credentials must match!</div>
                     <div>This operation is irreversable!</div>
+                    <div> NO ERROR CHECKING HERE. PLEASE TYPE IN CREDENTIALS EXACTLY. BETTER ERROR CHECKING IN FUTURE UPDATES</div>
       <div className="imgcontainer">
         <img src="../Resources/login_Icon.png" alt="Picture Placeholder" className="avatar"/>
       </div>

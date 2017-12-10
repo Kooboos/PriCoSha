@@ -39,7 +39,7 @@ export class Register extends Component{
 
                         //use the first query when database gets modified to recieve larger queries hashing
                         // const registrationQuery = 'http://localhost:5000/api/registerUser' + '/:' + username + '/:' + password + '/:' + firstName + '/:' + lastName;
-                        const registrationQuery = 'http://localhost:5000/api/registerUser' + '/:' + username + '/:' + passwordVal + '/:' + firstName + '/:' + lastName;
+                        const registrationQuery = 'http://localhost:5000/api/registerUser' + '/:' + username + '/:' + password + '/:' + firstName + '/:' + lastName;
                         
                         fetch(registrationQuery, {
                             mode: "cors",

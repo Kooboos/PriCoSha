@@ -16,11 +16,10 @@ export class Login extends Component{
     submitClicked(){
         //grab user and pass from fields
         const username = document.getElementById('usernameInput').value;
-        const password = document.getElementById('passwordInput').value;
         
         //use this following line when database gets modified to account for hashed values.
-        // const passwordVal = document.getElementById('passwordInput').value;
-        // const password = hash.sha256().update(passwordVal).digest('hex');
+        const passwordVal = document.getElementById('passwordInput').value;
+        const password = hash.sha256().update(passwordVal).digest('hex');
         console.log('user:', username);
         console.log('pass:', password);
 

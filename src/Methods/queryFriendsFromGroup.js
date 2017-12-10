@@ -1,6 +1,6 @@
 export const queryFriendsFromGroup = (groupName, username) => new Promise((resolve, reject) => {
     
-    const query = 'http://localhost:5000/api/getFriendsFromGroups/:' + groupName + '/:' + username;
+    const query = 'http://localhost:5000/api/getFriendsFromGroups/:' + username + '/:' + groupName;
 
     fetch(query, {
         mode: "cors",

@@ -131,3 +131,9 @@ span.psw {
 #SearchFriendGroups{
   width: 250px;
 }
+
+#addFriendsToGroup{
+  margin-top:15px;
+  width: 250px;
+  border-style: solid;
+}

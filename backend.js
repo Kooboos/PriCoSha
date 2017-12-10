@@ -98,7 +98,7 @@ app.get('/api/removeAccount/:username/:password/:firstName/:lastName',function(r
             console.log(error);
             console.log('Problem with Query!');
         } else {
-            console.log('Successful Query!');
+            console.log('Account successfully removed!!');
             if(OkPacket.affectedRows === 0){
                 response.json({status: 'NOT_FOUND'});
             }
@@ -275,7 +275,7 @@ app.get('/api/addFriendToGroup/:groupName/:creator/:userNames',function(request,
     const allValues = construct.substring(0, construct.length -2);
 
     const query = "INSERT INTO `Member` (username, group_name, username_creator) VALUES " + allValues;
-
+    console.log('query!!!!!!!!!!!!:', query);
     connection.query(query,
     function(error, rows, fields){
         if(error){
@@ -289,7 +289,7 @@ app.get('/api/addFriendToGroup/:groupName/:creator/:userNames',function(request,
     })
 });
 
-//remove People from a FriendGroup
+//remove People from Member
 app.get('/api/removeFriendsFromMember/:groupName',function(request, response){
     const groupName = "'" + (request.params.groupName).substr(1) + "'";    
 
@@ -302,6 +302,44 @@ app.get('/api/removeFriendsFromMember/:groupName',function(request, response){
             response.json({status:'FAILED'});
         } else {
             console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove memberName from all FriendGroups
+app.get('/api/removeMeFromMember/:memberName',function(request, response){
+    const memberName = "'" + (request.params.memberName).substr(1) + "'";    
+
+    const query = "DELETE from `Member` WHERE username_creator = " + memberName;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with removing Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove all of memberName's friendGroups
+app.get('/api/removeMyFriendGroups/:memberName',function(request, response){
+    const memberName = "'" + (request.params.memberName).substr(1) + "'";    
+
+    const query = "DELETE from `FriendGroup` WHERE username = " + memberName;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with removing Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed all friendGroups of' + memberName);
             response.json({status:'OK'});
                       
         }
