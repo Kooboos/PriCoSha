@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
-import {queryFriendGroups} from '../Methods/queryFriendGroups.js'
+import {queryFriendGroups} from '../Methods/queryFriendGroups.js';
+import {removeGroup} from '../Methods/removeFriendGroup';
+import {removeMembers} from '../Methods/removeMembers';
 
 export class OwnedFriendGroupDisplay extends Component{
     constructor(props){
@@ -78,8 +80,40 @@ export class OwnedFriendGroupDisplay extends Component{
     componentWillReceiveProps(nextProps){
         if(nextProps.operation === 'Refresh_FriendGroups'){
             this.update();
+            this.props.finishOperation;    
         }
-        this.props.finishOperation;
+
+        if(nextProps.operation === 'Remove_Group'){
+            console.log('removing from ownedFriendGroupDisplay');
+            const groupName = document.getElementById('removeFriendGroupInput').value;
+            console.log('groupName:', groupName);
+            if(groupName !== '' && groupName !== null){
+                //run sql to remove group, then run 'this.update();
+
+                removeMembers(groupName).then(response =>{
+                    console.log('response in ownedFriendGroups:', response);
+                    if(response.status === 'OK'){
+                        //remove group.
+                        removeGroup(groupName, userDataMap.get(dataMapKeys.username)).then(response =>{
+                            if(response.status === 'OK'){
+                                this.update();
+                            }
+                            else{
+                                alert('No friendGroup with such a name exists. Try again!');
+                            }
+                        });
+                    }
+                    else{
+                        console.log('something went wrong');
+                        alert('Something bad happened. Ask Santa Clause For Help');
+                    }
+
+
+                })
+
+            }
+            this.props.finishOperation;    
+        }
     }
 
     render(){

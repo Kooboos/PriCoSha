@@ -289,5 +289,24 @@ app.get('/api/addFriendToGroup/:groupName/:creator/:userNames',function(request,
     })
 });
 
+//remove People from a FriendGroup
+app.get('/api/removeFriendsFromMember/:groupName',function(request, response){
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";    
+
+    const query = "DELETE from `Member` WHERE group_name = " + groupName;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem with removing Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
 
 app.listen(5000);

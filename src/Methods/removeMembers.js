@@ -1,10 +1,10 @@
 import {userDataMap, dataMapKeys} from '../Components/UserDataMap.js';
 
-export const removeGroup = (groupName, creator) => new Promise((resolve, reject) => {
+export const removeMembers = (groupName) => new Promise((resolve, reject) => {
  
     //remove group    
 
-    const query = 'http://localhost:5000/api/removeGroup/:' + groupName + '/:' + creator;
+    const query = 'http://localhost:5000/api/removeFriendsFromMember/:' + groupName;
     
         fetch(query, {
             mode: "cors",
@@ -12,15 +12,14 @@ export const removeGroup = (groupName, creator) => new Promise((resolve, reject)
         }
             ).then(response => {
                 response.json().then(json=>{
-                    //This is the response after removing Group. If status === 'OK', proceed with adding users to group
+                    //This is the response after removing Members. If status === 'OK', proceed with adding users to group
                     if(json.status === 'OK'){
-                        console.log('group removed!!!');
-                        //Now we need to add all members from 'userNames' into friendGroup.
+                        console.log('Members removed!!!');
                         resolve({status:'OK'});
                     }
                     else{
                         //Something went wrong
-                        console.log('sommething went wrong while removing friendGroup');
+                        console.log('sommething went wrong while removing members');
                         resolve({status:'FAILED'})
                     }
                 }).catch(error => {

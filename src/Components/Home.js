@@ -85,10 +85,17 @@ export class Home extends Component{
     }
 
     refreshFriendGroupsClicked(){
-        if(this.setState.loggedIn){
+        if(this.state.loggedIn){
             //refreshGroups
             console.log('inside Home/Refreshgroups');
             this.setState({operation:'Refresh_FriendGroups'})
+        }
+    }
+
+    removeGroupClicked(){
+        if(this.state.loggedIn){
+            console.log('removing Group');
+            this.setState({operation:'Remove_Group'});
         }
     }
 
@@ -147,6 +154,10 @@ export class Home extends Component{
                     <div id='FriendGroupButtons'>
                         <button id='addFriendGroupButton' onClick={this.addFriendGroupClicked.bind(this)}>Add Group</button>
                         <button id='refreshFriendGroupsButton' onClick={this.refreshFriendGroupsClicked.bind(this)}>Refresh</button>
+                        <button id='removeGroupButton' onClick={this.removeGroupClicked.bind(this)}>Remove Group</button>
+                        <span>
+                            <input id='removeFriendGroupInput' type='text' style={{width:'150px', height:'20px', marginLeft:'-10px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}/>
+                        </span>
                     </div>
                     <div id='SearchFriendGroups'>
                         <SearchFriendGroups/>

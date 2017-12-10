@@ -34,7 +34,7 @@ export class SearchFriendGroups extends Component{
                         <input
                         id='searchFriendGroupsInput'
                         type='text'
-                        style={{width:'200px', height:'20px', marginLeft:'-30px'}}
+                        style={{width:'200px', height:'20px', marginLeft:'-30px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
                         />
                     </div>
                     <span>
