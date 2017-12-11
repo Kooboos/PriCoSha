@@ -20,6 +20,9 @@ import { getMostRecentContent } from '../Methods/getMostRecentContent';
 import { linkContentToGroup } from '../Methods/linkContentToGroup';
 import { addComment } from '../Methods/addComment';
 import { showComments } from '../Methods/showComments';
+import { addTag } from '../Methods/addTag';
+import { showTags } from '../Methods/showTags';
+import { showPendingTags } from '../Methods/showPendingTags';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -220,6 +223,76 @@ export class Home extends Component{
         }
     }
 
+    addTagClicked(){
+        if(this.state.loggedIn && document.getElementById('addTagInput').value !== ''){
+            const id = document.getElementById('addTagInput').value;
+            const taggee = prompt('Who do you want to tag:');
+            addTag(id, userDataMap.get(dataMapKeys.username), taggee).then(response =>{
+                console.log('response from addTag:', response);
+                if(response.status === 'OK'){
+                    alert('you have successfully tagged your friend in content #'+ id);
+                }
+                else{
+                    alert('Santa Clause said that either: 1. The Content you want to comment on doesn\'t exist, or 2. The person you want to tag doesn\'t exist.');
+                }
+            })
+        }
+    }
+    
+    showTagsClicked(){
+        if(this.state.loggedIn && document.getElementById('addTagInput').value !== ''){
+            console.log('showtags clicked');
+            const id = document.getElementById('addTagInput').value;
+            showTags(id).then(response =>{
+                console.log('allVerifiedTags:', response);
+                if(response.status === 'OK'){
+                    if(response.rows.length === 0){
+                        alert('There are currently no Public tags on this content.');
+                    }
+                    else{
+                        console.log('parsing tags');
+                        //parse all tags here
+                    }
+                }
+                
+            });
+        }
+    }
+
+    checkMyPendingTagsClicked(){
+        if(this.state.loggedIn){
+            showPendingTags(userDataMap.get(dataMapKeys.username)).then(response =>{
+                console.log('this is the response from checking tags:', response);
+                if(response.status === 'OK'){
+                    if(response.rows.length === 0){
+                        alert('You have no pending tags to verify');
+                    }
+                    else{
+                        //parse all tags here
+                        //response.rows = [{}...], check DB for attributes.
+                        let alertString = '';
+                        for(let i = 0; i < response.rows.length; i++){
+                            const oneTag = 'Tag ID: |' + response.rows[i].id + '|  Tagged by: '+ response.rows[i].username_tagger + ' at: ' + response.rows[i].timest + '\n';
+                            alertString = alertString + oneTag;
+                        }
+                        alert(alertString);
+                    }
+                }
+                else{
+                    alert('Something went wrong. you know the drill. talk to Santa Clause.')
+                }
+            })
+            console.log('checking pending Tags');
+        }
+    }
+
+    updatePendingTagsClicked(){
+        if(this.state.loggedIn){
+            const id = document.getElementById('pendingTagInput').value;
+            console.log('Updating pending Tags');
+        }
+    }
+
 
 
     render(){
@@ -287,6 +360,7 @@ export class Home extends Component{
                         <AddFriendsToFriendGroup/>
                     </div>
                     <div id='ContentWindowContainer'>
+                    <div>CONTENT</div>
                             <ContentWindow
                             homeState = {this.state}
                             publicContent = {[]}
@@ -302,7 +376,9 @@ export class Home extends Component{
                         <button id='addContentButton' onClick={this.addContentClicked.bind(this)}>Add Content</button>
                         
                     </div>
+
                     <div id='commentButtons'>
+                    <div>Add Comments</div>
                         <input
                         id='addCommentInput'
                         type='number' 
@@ -311,6 +387,30 @@ export class Home extends Component{
                         />
                         <button id='addCommentButton' onClick={this.addCommentClicked.bind(this)}>Add Comment</button>
                         <button id='showCommentButton' onClick={this.showCommentsClicked.bind(this)}>Show All Comments</button>
+                    </div>
+
+                    <div id='tagButtons'>
+                    <div>Add Tag</div>
+                        <input
+                        id='addTagInput'
+                        type='number' 
+                        style={{width:'150px', height:'20px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
+                        placeholder='Content ID'
+                        />
+                        <button id='addTagButton' onClick={this.addTagClicked.bind(this)}>Add Tag</button>
+                        <button id='showTagButton' onClick={this.showTagsClicked.bind(this)}>Show All Tags</button>
+                    </div>
+
+                    <div id='pendingTagButtons'>
+                    <div>Pending Tags</div>
+                        <input
+                        id='pendingTagInput'
+                        type='number' 
+                        style={{width:'150px', height:'20px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
+                        placeholder='Tag ID'
+                        />
+                        <button id='verifyTagButton' onClick={this.updatePendingTagsClicked.bind(this)}>Verify Tag</button>
+                        <button id='checkPendingTagsButton' onClick={this.checkMyPendingTagsClicked.bind(this)}>Check Pending Tags</button>
                     </div>
 
 

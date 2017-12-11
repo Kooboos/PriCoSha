@@ -491,4 +491,74 @@ app.get('/api/showComments/:id',function(request, response){
     
 });
 
+//add tag to content
+app.get('/api/addTag/:id/:tagger/:tagee',function(request, response){
+    const tagger = "'" + (request.params.tagger).substr(1) + "'";
+    const id = "'" + (request.params.id).substr(1) + "'";
+    const taggee = "'" + (request.params.tagee).substr(1) + "'";
+    
+    const query = "Insert Into `Tag` (id, username_tagger, username_taggee, status) values ("+ id + ", " + tagger + ", " + taggee + ", 0)";
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log(error);
+            console.log('Problem adding Tag!');
+        } else {
+            console.log('Successfully Added Tag to content: ', id);
+            response.json({status:'OK'});
+                      
+        }
+    })
+    
+});
+
+//show all verified Tag of content
+app.get('/api/showTags/:id',function(request, response){
+    const id = "'" + (request.params.id).substr(1) + "'";
+    
+    const query = "Select * from `Tag` where id= "+ id + 'AND status = 1';
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem adding comment!');
+        } else {
+            console.log('Successfully Added Comment to content: ', id);
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
+
+//show all Pending Tags
+app.get('/api/showPendingTags/:username',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "Select * from `Tag` where username_taggee= "+ username + 'AND status = 0';
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem showing Pending Tags!');
+        } else {
+            console.log('Successfully returned pending tags');
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
+
+
+
+
+
+
+
+
 app.listen(5000);
