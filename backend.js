@@ -447,9 +447,48 @@ app.get('/api/getLastContent',function(request, response){
                           
             }
         })
-    });
+});
 
+//add comment to content
+app.get('/api/addComment/:id/:username/:comment',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    const id = "'" + (request.params.id).substr(1) + "'";
+    const comment = "'" + (request.params.comment).substr(1) + "'";
+    
+    const query = "Insert Into `Comment` (id, username, comment_text) values ("+ id + ", " + username + ", " + comment + ")";
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem adding comment!');
+        } else {
+            console.log('Successfully Added Comment to content: ', id);
+            response.json({status:'OK'});
+                      
+        }
+    })
+    
+});
 
-
+//add comment to content
+app.get('/api/showComments/:id',function(request, response){
+    const id = "'" + (request.params.id).substr(1) + "'";
+    
+    const query = "Select * from `Comment` where id= "+ id;
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem adding comment!');
+        } else {
+            console.log('Successfully Added Comment to content: ', id);
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
 
 app.listen(5000);

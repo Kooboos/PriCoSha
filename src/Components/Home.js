@@ -18,6 +18,8 @@ import { getGroupContent } from '../Methods/getGroupContent';
 import { addContent } from '../Methods/addContent';
 import { getMostRecentContent } from '../Methods/getMostRecentContent';
 import { linkContentToGroup } from '../Methods/linkContentToGroup';
+import { addComment } from '../Methods/addComment';
+import { showComments } from '../Methods/showComments';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -177,6 +179,47 @@ export class Home extends Component{
         }
     }
 
+    addCommentClicked(){
+        if(this.state.loggedIn && document.getElementById('addCommentInput').value !== ''){
+            const id = document.getElementById('addCommentInput').value;
+            const comment = prompt('Comment:');
+            addComment(userDataMap.get(dataMapKeys.username), comment, id).then(response =>{
+                console.log('response from addComment:', response);
+                if(response.status === 'OK'){
+                    alert('your comment has been successfully added');
+                }
+                else{
+                    alert('Santa Clause said that the Content you want to comment on doesn\'t exist');
+                }
+            })
+        }
+    }
+
+    showCommentsClicked(){
+        if(this.state.loggedIn && document.getElementById('addCommentInput').value !== ''){
+            const id = document.getElementById('addCommentInput').value;
+            showComments(id).then(response =>{
+                console.log('response from showComments:', response);
+                if(response.status === 'OK'){
+                    if(response.rows.length === 0){
+                        alert('This Content item has 0 comments. Why don\'t you add one!?');                        
+                    }
+                    else{
+                        let alertString = '';
+
+                        for(let i=0; i< response.rows.length; i++){
+                            alertString = alertString + i+1 + '. Comment: '+ response.rows[i].comment_text + '. Commented By: ' + response.rows[i].username + ', on: '+ response.rows[i].timest + '. \n';
+                        }
+                        alert(alertString);
+                    }
+                }
+                else{
+                    alert('These are not the droids you\'re looking for. There is also no content with id: '+id);
+                }
+            })
+        }
+    }
+
 
 
     render(){
@@ -258,6 +301,16 @@ export class Home extends Component{
                         <button id='refreshPublicContent' onClick={this.refreshContentClicked.bind(this)}>Refresh</button>
                         <button id='addContentButton' onClick={this.addContentClicked.bind(this)}>Add Content</button>
                         
+                    </div>
+                    <div id='commentButtons'>
+                        <input
+                        id='addCommentInput'
+                        type='number' 
+                        style={{width:'150px', height:'20px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
+                        placeholder='Content ID'
+                        />
+                        <button id='addCommentButton' onClick={this.addCommentClicked.bind(this)}>Add Comment</button>
+                        <button id='showCommentButton' onClick={this.showCommentsClicked.bind(this)}>Show All Comments</button>
                     </div>
 
 
