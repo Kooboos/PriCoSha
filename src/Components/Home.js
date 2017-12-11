@@ -13,6 +13,8 @@ import {SearchFriendGroups} from './SearchFriendGroups.js';
 import {logout} from './Logout.js';
 import {createGroup} from '../Methods/createGroup.js';
 import { AddFriendsToFriendGroup } from './addFriendToFriendGroup';
+import { ContentWindow } from './ContentWindow';
+import { getGroupContent } from '../Methods/getGroupContent';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -29,7 +31,8 @@ export class Home extends Component{
 
         this.state = {
             loggedIn: userDataMap.get(dataMapKeys.loginStatus),
-            operation: 'NO-OP'
+            operation: 'NO-OP',
+            content: []
         }
 
     }
@@ -100,6 +103,25 @@ export class Home extends Component{
         }
     }
 
+    lookupGroupContentClicked(){
+        if(this.state.loggedIn && document.getElementById('lookupContentInput').value !== ''){
+            const groupName = document.getElementById('lookupContentInput').value;          
+            console.log('looking up group content');
+            getGroupContent(groupName).then(response =>{
+                console.log(response);
+                this.setState({operation: 'Lookup_Group_Content'});
+                this.setState({content: response.rows});
+            })
+        }
+    }
+
+    refreshContentClicked(){
+        if(this.setState.loggedIn){
+            console.log('refreshing public content');
+            this.setState({operation: 'Refresh_Content'});
+        }
+    }
+
 
 
     render(){
@@ -165,6 +187,21 @@ export class Home extends Component{
                     </div>
                     <div id='addFriendsToGroup'>
                         <AddFriendsToFriendGroup/>
+                    </div>
+                    <div id='ContentWindowContainer'>
+                            <ContentWindow
+                            homeState = {this.state}
+                            publicContent = {[]}
+                            operation = {this.state.operation}
+                            finishOperation = {this.finishOperation.bind(this)}/>
+                    </div>
+                    <div id='ContentWindowButtons'>
+                        <span>
+                            <input id='lookupContentInput' type='text' placeholder='FriendGroup Name' style={{width:'150px', height:'20px', marginLeft:'-10px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}/>
+                        </span>
+                        <button id='LookupContentButton' onClick={this.lookupGroupContentClicked.bind(this)}>Lookup Group Content</button>
+                        <button id='refreshPublicContent' onClick={this.refreshContentClicked.bind(this)}>Refresh</button>
+                        
                     </div>
 
 

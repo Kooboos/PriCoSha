@@ -346,5 +346,47 @@ app.get('/api/removeMyFriendGroups/:memberName',function(request, response){
     })
 });
 
+//Get All public content
+app.get('/api/getPublicContent',function(request, response){
+
+    const query = "SELECT * FROM `Content` WHERE public = true";
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successfully got public content!');
+            response.json({rows:rows});
+                      
+        }
+    })
+});
+
+//Get Group public content
+app.get('/api/getGroupContent/:groupName',function(request, response){
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";    
+
+    const query = "Select * From `Content` where id in (select id from `Share` where group_name = "+ groupName + ")";
+    // const query1 = "SELECT * FROM `Content` WHERE public = true";
+    
+        connection.query(query,
+        function(error, rows, fields){
+            if(error){
+                console.log(error);
+                console.log('Problem with Query!');
+            } else {
+                console.log('Successfully got group content!');
+                response.json({rows:rows});
+                          
+            }
+        })
+});
+
+
+
+
+
 
 app.listen(5000);

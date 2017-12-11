@@ -115,6 +115,8 @@ span.psw {
   border-width: 3px;
   width: 200px;
   height: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #friendGroupLoginContainer{
@@ -126,14 +128,29 @@ span.psw {
   width: 200px;
   border-style: solid;
   border-width: 3px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #SearchFriendGroups{
   width: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #addFriendsToGroup{
   margin-top:15px;
   width: 250px;
   border-style: solid;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#ContentWindowContainer{
+  border-style: solid;
+  border-width: 3px;
+  width: 500px;
+  height: 250px;
+  margin-left: auto;
+  margin-right: auto;
 }
