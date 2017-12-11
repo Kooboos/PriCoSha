@@ -371,6 +371,7 @@ app.get('/api/getGroupContent/:groupName',function(request, response){
     const query = "Select * From `Content` where id in (select id from `Share` where group_name = "+ groupName + ")";
     // const query1 = "SELECT * FROM `Content` WHERE public = true";
     
+    console.log('Taking all groupContent from: ', groupName);
         connection.query(query,
         function(error, rows, fields){
             if(error){
@@ -409,11 +410,31 @@ app.get('/api/addContent/:username/:file_path/:content_name/:public', function(r
 });
 
 //Link Content Item to Group
-app.get('/api/linkContentToGroup/:username/:file_path/:content_name/:public', function(request, response){
-    const groupName = "'" + (request.params.groupName).substr(1) + "'";    
+app.get('/api/linkContentToGroup/:id/:groupname/:username', function(request, response){
+    const groupName = "'" + (request.params.groupname).substr(1) + "'";    
+    const username = "'" + (request.params.username).substr(1) + "'";    
+    const idx = "'" + (request.params.id).substr(1) + "'";    
 
-    const query = "Select * From `Content` where id in (select id from `Share` where group_name = "+ groupName + ")";
-    // const query1 = "SELECT * FROM `Content` WHERE public = true";
+    const query = "Insert into `Share` (id, group_name, username) values ("+ idx + ", " + groupName + ", " + username+")";
+    
+        connection.query(query,
+        function(error, rows, fields){
+            if(error){
+                console.log(error);
+                console.log('Problem with Query!');
+                response.json({status:'FAILED'});
+            } else {
+                console.log('Successfully got group content!');
+                response.json({status:'OK'});
+                          
+            }
+        })
+});
+
+//Get Most Recent content item
+app.get('/api/getLastContent',function(request, response){
+    
+        const query = "SELECT * FROM `Content` where id = (SELECT max(id) from `Content`)";
     
         connection.query(query,
         function(error, rows, fields){
@@ -421,12 +442,12 @@ app.get('/api/linkContentToGroup/:username/:file_path/:content_name/:public', fu
                 console.log(error);
                 console.log('Problem with Query!');
             } else {
-                console.log('Successfully got group content!');
+                console.log('Successfully got public content!');
                 response.json({rows:rows});
                           
             }
         })
-});
+    });
 
 
 

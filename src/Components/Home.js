@@ -16,6 +16,8 @@ import { AddFriendsToFriendGroup } from './addFriendToFriendGroup';
 import { ContentWindow } from './ContentWindow';
 import { getGroupContent } from '../Methods/getGroupContent';
 import { addContent } from '../Methods/addContent';
+import { getMostRecentContent } from '../Methods/getMostRecentContent';
+import { linkContentToGroup } from '../Methods/linkContentToGroup';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -110,8 +112,8 @@ export class Home extends Component{
             console.log('looking up group content');
             getGroupContent(groupName).then(response =>{
                 console.log(response);
-                this.setState({operation: 'Lookup_Group_Content'});
                 this.setState({content: response.rows});
+                this.setState({operation: 'Lookup_Group_Content'});
             })
         }
     }
@@ -144,7 +146,19 @@ export class Home extends Component{
                     friendGroup = prompt('What is the name of the FriendGroup you want to share it to?');
                     addContent(username, comment, contentName, numPublic).then(response =>{
                         console.log('this is the response from adding content:', response);
-                        //now Link Content to Shared;
+                        getMostRecentContent().then(response =>{
+                            console.log('this is the most recent Content:', response);
+                            //now Link Content to Shared;
+                            linkContentToGroup(response.rows[0].id, friendGroup, username).then(response =>{
+                                console.log('response afterLink:', response)
+                                if(response){
+                                    alert('private content shared to group: ' + friendGroup + '!');
+                                }
+                                else{
+                                    alert('something went wrong. talk to Santa Clause.');
+                                }
+                            })
+                        })
                     })
                 }
                 else{

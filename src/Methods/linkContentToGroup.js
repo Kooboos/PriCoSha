@@ -1,6 +1,6 @@
-export const getGroupContent = (groupName) => new Promise((resolve, reject) => {
+export const linkContentToGroup = (id, groupName, username) => new Promise((resolve, reject) => {
     
-    const query = 'http://localhost:5000/api/getGroupContent/:' + groupName ;
+    const query = 'http://localhost:5000/api/linkContentToGroup/:' + id + '/:' + groupName + '/:' + username;
 
     fetch(query, {
         mode: "cors",

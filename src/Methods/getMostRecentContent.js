@@ -1,6 +1,6 @@
-export const getGroupContent = (groupName) => new Promise((resolve, reject) => {
+export const getMostRecentContent = () => new Promise((resolve, reject) => {
     
-    const query = 'http://localhost:5000/api/getGroupContent/:' + groupName ;
+    const query = 'http://localhost:5000/api/getLastContent';
 
     fetch(query, {
         mode: "cors",
