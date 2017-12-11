@@ -554,6 +554,27 @@ app.get('/api/showPendingTags/:username',function(request, response){
     
 });
 
+//Update Pending Tags given content id
+app.get('/api/updatePendingTags/:id/:tagger',function(request, response){
+    const id = "'" + (request.params.id).substr(1) + "'";
+    const tagger = "'" + (request.params.tagger).substr(1) + "'";
+    
+    const query = "UPDATE `Tag` SET status = 1 where username_tagger= "+ tagger + ' AND status = 0';
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem showing Pending Tags!');
+        } else {
+            console.log('Successfully returned pending tags');
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
+
 
 
 

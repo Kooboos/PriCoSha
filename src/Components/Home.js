@@ -23,6 +23,7 @@ import { showComments } from '../Methods/showComments';
 import { addTag } from '../Methods/addTag';
 import { showTags } from '../Methods/showTags';
 import { showPendingTags } from '../Methods/showPendingTags';
+import { updatePendingTags } from '../Methods/updatePendingTag';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -287,8 +288,12 @@ export class Home extends Component{
     }
 
     updatePendingTagsClicked(){
-        if(this.state.loggedIn){
+        if(this.state.loggedIn && document.getElementById('pendingTagInput').value !== '' && document.getElementById('pendingTaggeeInput').value !== ''){
             const id = document.getElementById('pendingTagInput').value;
+            const taggee = document.getElementById('pendingTaggeeInput').value;            
+            updatePendingTags(id, taggee).then(response =>{
+                console.log('this is the response from Updating tags', response);
+            })
             console.log('Updating pending Tags');
         }
     }
@@ -409,6 +414,13 @@ export class Home extends Component{
                         style={{width:'150px', height:'20px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
                         placeholder='Tag ID'
                         />
+                        <input
+                        id='pendingTaggeeInput'
+                        type='text' 
+                        style={{width:'150px', height:'20px', borderColor:'black', borderStyle:'solid', borderWidth:'5px'}}
+                        placeholder='Taggee username'
+                        />
+
                         <button id='verifyTagButton' onClick={this.updatePendingTagsClicked.bind(this)}>Verify Tag</button>
                         <button id='checkPendingTagsButton' onClick={this.checkMyPendingTagsClicked.bind(this)}>Check Pending Tags</button>
                     </div>
