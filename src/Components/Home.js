@@ -116,7 +116,8 @@ export class Home extends Component{
     }
 
     refreshContentClicked(){
-        if(this.setState.loggedIn){
+        console.log('inside refreshContent');
+        if(this.state.loggedIn){
             console.log('refreshing public content');
             this.setState({operation: 'Refresh_Content'});
         }
