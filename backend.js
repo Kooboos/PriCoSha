@@ -384,7 +384,49 @@ app.get('/api/getGroupContent/:groupName',function(request, response){
         })
 });
 
+//add a content item
+app.get('/api/addContent/:username/:file_path/:content_name/:public', function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    const file_path = "'" + (request.params.file_path).substr(1) + "'";
+    const content_name = "'" + (request.params.content_name).substr(1) + "'";
+    const public = "'" + (request.params.public).substr(1) + "'";
+    
 
+    const query = "Insert Into `Content` (username, file_path, content_name, public) Values ("+username + ", " + file_path + ", " + content_name + ", " + public +")";
+    // const query1 = "SELECT * FROM `Content` WHERE public = true";
+    
+        connection.query(query,
+        function(error, rows, fields){
+            if(error){
+                console.log(error);
+                console.log('Problem with Query!');
+            } else {
+                console.log('Successfully added a content item!');
+                response.json({rows:rows});
+                          
+            }
+        })
+});
+
+//Link Content Item to Group
+app.get('/api/linkContentToGroup/:username/:file_path/:content_name/:public', function(request, response){
+    const groupName = "'" + (request.params.groupName).substr(1) + "'";    
+
+    const query = "Select * From `Content` where id in (select id from `Share` where group_name = "+ groupName + ")";
+    // const query1 = "SELECT * FROM `Content` WHERE public = true";
+    
+        connection.query(query,
+        function(error, rows, fields){
+            if(error){
+                console.log(error);
+                console.log('Problem with Query!');
+            } else {
+                console.log('Successfully got group content!');
+                response.json({rows:rows});
+                          
+            }
+        })
+});
 
 
 

@@ -15,6 +15,7 @@ import {createGroup} from '../Methods/createGroup.js';
 import { AddFriendsToFriendGroup } from './addFriendToFriendGroup';
 import { ContentWindow } from './ContentWindow';
 import { getGroupContent } from '../Methods/getGroupContent';
+import { addContent } from '../Methods/addContent';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -123,6 +124,45 @@ export class Home extends Component{
         }
     }
 
+    addContentClicked(){
+        if(this.state.loggedIn){
+            console.log('addingContent');
+            const username = userDataMap.get(dataMapKeys.username);
+            const comment = prompt('What is your Content Comment?');
+            const contentName = prompt('What is the title of your content?');
+            const publicOrNot = prompt('Do you want your content to be public? (true/false)');
+            let numPublic = '';
+            if(publicOrNot === 'true'){
+                numPublic = '1';
+            }
+            else{
+                numPublic = '0'
+            }
+            let friendGroup = '';
+            if(numPublic === '1' || numPublic === '0'){
+                if(numPublic ==='0'){
+                    friendGroup = prompt('What is the name of the FriendGroup you want to share it to?');
+                    addContent(username, comment, contentName, numPublic).then(response =>{
+                        console.log('this is the response from adding content:', response);
+                        //now Link Content to Shared;
+                    })
+                }
+                else{
+                    addContent(username, comment, contentName, numPublic).then(response =>{
+                        console.log('this is the response from adding content:', response);
+                        this.refreshContentClicked();
+                    })
+                }
+
+            }
+            else{
+                alert('must input "true" or "false". Try Again');
+            }
+            
+
+        }
+    }
+
 
 
     render(){
@@ -202,6 +242,7 @@ export class Home extends Component{
                         </span>
                         <button id='LookupContentButton' onClick={this.lookupGroupContentClicked.bind(this)}>Lookup Group Content</button>
                         <button id='refreshPublicContent' onClick={this.refreshContentClicked.bind(this)}>Refresh</button>
+                        <button id='addContentButton' onClick={this.addContentClicked.bind(this)}>Add Content</button>
                         
                     </div>
 
