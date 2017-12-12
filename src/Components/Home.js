@@ -24,6 +24,8 @@ import { addTag } from '../Methods/addTag';
 import { showTags } from '../Methods/showTags';
 import { showPendingTags } from '../Methods/showPendingTags';
 import { updatePendingTags } from '../Methods/updatePendingTag';
+import { toggleBanner } from '../Methods/toggleBanner';
+import { changeBannerColor } from '../Methods/changeBannerColor';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -41,7 +43,9 @@ export class Home extends Component{
         this.state = {
             loggedIn: userDataMap.get(dataMapKeys.loginStatus),
             operation: 'NO-OP',
-            content: []
+            content: [],
+            bannerToggle: '0',
+            bannerColor: '#222'
         }
 
     }
@@ -261,6 +265,7 @@ export class Home extends Component{
     }
 
     checkMyPendingTagsClicked(){
+        console.log(userDataMap.get(dataMapKeys.showBanner));
         if(this.state.loggedIn){
             showPendingTags(userDataMap.get(dataMapKeys.username)).then(response =>{
                 console.log('this is the response from checking tags:', response);
@@ -298,18 +303,34 @@ export class Home extends Component{
         }
     }
 
+    toggleBannerClicked(){
+        if(this.state.loggedIn){
+            toggleBanner(userDataMap.get(dataMapKeys.username), this.state.bannerToggle);
+            if(this.state.bannerToggle === '0'){
+                this.setState({bannerToggle: '1'});
+            }
+            if(this.state.bannerToggle === '1'){
+                this.setState({bannerToggle: '0'});
+            }
+        }
+    }
+
+    changebannerColor(){
+        if(this.state.loggedIn){
+            const color = prompt('Color of Banner in format "#XXXXXX"');
+            changeBannerColor(userDataMap.get(dataMapKeys.username), color);
+            this.setState({bannerColor: color});
+        }            
+    }
 
 
+
+    
     render(){
-        return(
+        const thePage = 
+        <div>
             <div className="App">
-            
-            
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo"/>
-              <h1 className="App-title">Welcome to PriCoSha</h1>
-              <h2 id='UnderTitle'>(Yes, we "borrowed" the React Logo...)</h2>
-            </header>
+
     
             <div>
               
@@ -325,6 +346,12 @@ export class Home extends Component{
               </span>
               <span>
                 <a href="/remove_account" style={{marginLeft: '5px', marginRight: '5px'}}>Remove Account</a>
+              </span>
+              <span>
+                  <button onClick={this.toggleBannerClicked.bind(this)}>toggle banner</button>
+              </span>
+              <span>
+                  <button onClick={this.changebannerColor.bind(this)}>Change Banner Color</button>
               </span>
               <span>
                   <LoggedIn loggedIn={userDataMap.get(dataMapKeys.loginStatus)}/>
@@ -430,6 +457,22 @@ export class Home extends Component{
             
             
             </div>
+        </div>
+
+        if(this.state.bannerToggle === '1'){
+            return(
+                <div>
+                <header id= 'AppBanner' style={{backgroundColor:'#'+this.state.bannerColor}}>
+                <img src={logo} className="App-logo" alt="logo"/>
+                <h1 className="App-title">Welcome to PriCoSha</h1>
+                <h2 id='UnderTitle'>(Yes, we "borrowed" the React Logo...)</h2>
+              </header>
+              {thePage}
+              </div>
+            )
+        }
+        return(
+            thePage
         );
     }
 }

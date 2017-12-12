@@ -68,7 +68,7 @@ app.get('/api/registerUser/:username/:password/:firstName/:lastName',function(re
     const firstName = "'" + (request.params.firstName).substr(1) + "'";
     const lastName = "'" + (request.params.lastName).substr(1) + "'";
     
-    const query = 'INSERT INTO `Person` (username, password, first_name, last_name) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +')'; 
+    const query = 'INSERT INTO `Person` (username, password, first_name, last_name, showBanner, colorBanner) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +', true, #000000)'; 
     console.log('registrationQuery:', query);
     connection.query(query,
     function(error, rows, fields){
@@ -575,9 +575,47 @@ app.get('/api/updatePendingTags/:id/:tagger',function(request, response){
     
 });
 
+//Toggle Banner
+app.get('/api/toggleBanner/:username/:boolz',function(request, response){
+    const boolz = "'" + (request.params.boolz).substr(1) + "'";
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "UPDATE `Person` SET showBanner = " + boolz + " where username= "+ username;
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem showing Pending Tags!');
+        } else {
+            console.log('Successfully returned pending tags');
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
 
-
-
+//Banner Color
+app.get('/api/changeBannerColor/:username/:color',function(request, response){
+    const color = "'" + (request.params.color).substr(1) + "'";
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "UPDATE `Person` SET colorBanner = " + color + " where username= "+ username;
+    
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            response.json({status:'FAILED'})
+            console.log('Problem showing Pending Tags!');
+        } else {
+            console.log('Successfully returned pending tags');
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
 
 
 

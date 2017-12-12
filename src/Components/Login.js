@@ -38,6 +38,8 @@ export class Login extends Component{
                         userDataMap.set(dataMapKeys.firstName, json.rows[0].first_name);
                         userDataMap.set(dataMapKeys.lastName, json.rows[0].last_name);
                         userDataMap.set(dataMapKeys.loginStatus, true);
+                        userDataMap.set(dataMapKeys.showBanner, json.rows[0].showBanner);
+                        userDataMap.set(dataMapKeys.bannerColor, json.rows[0].colorBanner);
 
                         //go back to homePage with new Info
                         this.setState({loggedIn: true});

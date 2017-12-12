@@ -5,5 +5,7 @@ export const dataMapKeys = {
     username: 'UNIQUE_PERSON_USERNAME',
     firstName: 'UNIQUE_PERSON_FIRSTNAME',
     lastName: 'UNIQUE_PERSON_LASTNAME',
+    showBanner: 'UNIQUE_SHOWBANNER',
+    bannerColor: 'UNIQUE_USER_COLOR'
 
 };
