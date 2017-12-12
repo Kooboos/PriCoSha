@@ -257,6 +257,11 @@ export class Home extends Component{
                     else{
                         console.log('parsing tags');
                         //parse all tags here
+                        let query = "You've been tagged in this Content item by "+ response.rows.length + " people: \n";
+                        for(let i = 0; i < response.rows.length; i++){
+                            query = query + response.rows[i].username_tagger + '\n';
+                        }
+                        alert(query);
                     }
                 }
                 

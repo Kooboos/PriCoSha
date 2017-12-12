@@ -4,6 +4,10 @@ import { Route, Redirect } from 'react-router';
 import {logout} from './Logout.js';
 import {removeMeFromMembers} from '../Methods/removeMeFromMembers';
 import {removeMyFriendGroups} from '../Methods/removeMyFriendGroups';
+import { removeTags } from '../Methods/removeTags';
+import { removeMeFromShare } from '../Methods/removeMeFromShare';
+import { removeMeFromComments } from '../Methods/removeMeFromComments';
+import { removeMeFromContent } from '../Methods/removeMeFromContent';
 var hash = require('hash.js')
 
 
@@ -26,16 +30,56 @@ export class RemoveAccount extends Component{
         const password = hash.sha256().update(passwordVal).digest('hex');
         console.log('first log');
 
-        removeMeFromMembers(username).then(response => {
+        removeTags(username).then(response=>{
             if(response.status === 'OK'){
-                removeMyFriendGroups(username).then(response => {
+                removeMeFromComments(username).then(response=>{
                     if(response.status === 'OK'){
-                        this.removeAccount(username, password, firstName, lastName);
+                        removeMeFromShare(username).then(response=>{
+                            if(response.status === 'OK'){
+                                removeMeFromContent(username).then(response=>{
+                                    if(response.status === 'OK'){
+                                        removeMeFromMembers(username).then(response=>{
+                                            if(response.status === 'OK'){
+                                                removeMyFriendGroups(username).then(response => {
+                                                    if(response.status === 'OK'){
+                                                        this.removeAccount(username, password, firstName, lastName);
+                                                    }
+                                                })     
+                                            }
+                                        })   
+                                    }
+                                })            
+                            }
+                        })
                     }
                 })
-            
             }
         })
+
+        // removeMeFromMembers(username).then(response => {
+        //     if(response.status === 'OK'){
+        //         removeMeFromShare(username).then(response=>{
+        //             if(response.status === 'OK'){
+        //                 removeTags(username).then(response =>{
+        //                     console.log('responsefrom removeTags:', response);
+        //                     removeMeFromComments(username).then(response=>{
+        //                         if(response.status === 'OK'){
+        //                             removeMyFriendGroups(username).then(response => {
+        //                                 if(response.status === 'OK'){
+        //                                     this.removeAccount(username, password, firstName, lastName);                            
+                                    
+        //                                 }
+        //                             })
+        //                         }
+        //                     })
+                            
+        //                 })
+        //             }
+        //         })
+                
+            
+        //     }
+        // })
         
     }
 

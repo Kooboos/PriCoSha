@@ -68,7 +68,7 @@ app.get('/api/registerUser/:username/:password/:firstName/:lastName',function(re
     const firstName = "'" + (request.params.firstName).substr(1) + "'";
     const lastName = "'" + (request.params.lastName).substr(1) + "'";
     
-    const query = 'INSERT INTO `Person` (username, password, first_name, last_name, showBanner, colorBanner) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +', true, #000000)'; 
+    const query = 'INSERT INTO `Person` (username, password, first_name, last_name, showBanner, colorBanner) VALUES ('+ username + ', '+ password + ', ' + firstName + ', ' + lastName +', true, 000000)'; 
     console.log('registrationQuery:', query);
     connection.query(query,
     function(error, rows, fields){
@@ -298,7 +298,51 @@ app.get('/api/removeFriendsFromMember/:groupName',function(request, response){
     connection.query(query,
     function(error, rows, fields){
         if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
             console.log('Problem with removing Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove Me from Share
+app.get('/api/removeMeFromShare/:username',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";    
+
+    const query = "DELETE from `Share` WHERE username = " + username;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
+            console.log('Problem with Me from Share Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove Me from Comments
+app.get('/api/removeMeFromComments/:username',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";    
+
+    const query = "DELETE from `Comment` WHERE username = " + username;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
+            console.log('Problem with Me from Comments Query!');
             response.json({status:'FAILED'});
         } else {
             console.log('Successfully removed Friends from group Query!');
@@ -317,6 +361,29 @@ app.get('/api/removeMeFromMember/:memberName',function(request, response){
     connection.query(query,
     function(error, rows, fields){
         if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
+            console.log('Problem with removing Friends Query!');
+            response.json({status:'FAILED'});
+        } else {
+            console.log('Successfully removed Friends from group Query!');
+            response.json({status:'OK'});
+                      
+        }
+    })
+});
+
+//remove me from Content
+app.get('/api/removeMeFromContent/:username',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";    
+
+    const query = "DELETE from `Content` WHERE username = " + username;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
             console.log('Problem with removing Friends Query!');
             response.json({status:'FAILED'});
         } else {
@@ -336,6 +403,8 @@ app.get('/api/removeMyFriendGroups/:memberName',function(request, response){
     connection.query(query,
     function(error, rows, fields){
         if(error){
+            console.log('query:---------------:', query);
+            console.log('-------------------------',error);
             console.log('Problem with removing Friends Query!');
             response.json({status:'FAILED'});
         } else {
@@ -617,7 +686,26 @@ app.get('/api/changeBannerColor/:username/:color',function(request, response){
     
 });
 
-
+//Remove all Tags
+app.get('/api/removeTags/:username',function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "Delete From `Tag` WHERE username_tagger = "+ username + " OR username_taggee = "+ username;
+    console.log('remove Person Query:', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log('Problem Removing Tags-------------------------------------------------------!');
+            console.log(error);
+            response.json({status:'FAILED'})
+        } else {
+            console.log('Successfully returned pending tags');
+            response.json({status:'OK', rows:rows});
+                      
+        }
+    })
+    
+});
 
 
 app.listen(5000);
