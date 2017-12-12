@@ -26,6 +26,7 @@ import { showPendingTags } from '../Methods/showPendingTags';
 import { updatePendingTags } from '../Methods/updatePendingTag';
 import { toggleBanner } from '../Methods/toggleBanner';
 import { changeBannerColor } from '../Methods/changeBannerColor';
+import { getFriendGroup } from '../Methods/removeFriendGroupMethods/getFG';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -159,15 +160,19 @@ export class Home extends Component{
                         getMostRecentContent().then(response =>{
                             console.log('this is the most recent Content:', response);
                             //now Link Content to Shared;
-                            linkContentToGroup(response.rows[0].id, friendGroup, username).then(response =>{
-                                console.log('response afterLink:', response)
-                                if(response){
-                                    alert('private content shared to group: ' + friendGroup + '!');
-                                }
-                                else{
-                                    alert('something went wrong. talk to Santa Clause.');
-                                }
+                            getFriendGroup(friendGroup).then(fgresponse=>{
+                                console.log('friendGroup response:', fgresponse);
+                                linkContentToGroup(response.rows[0].id, friendGroup, fgresponse.rows[0].username).then(response =>{
+                                    console.log('response afterLink:', response)
+                                    if(response){
+                                        alert('private content shared to group: ' + friendGroup + '!');
+                                    }
+                                    else{
+                                        alert('something went wrong. talk to Santa Clause.');
+                                    }
+                                })
                             })
+                            
                         })
                     })
                 }

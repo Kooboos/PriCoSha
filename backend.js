@@ -201,8 +201,7 @@ app.get('/api/getFriendsFromGroups/:username/:groupName',function(request, respo
             console.log('Problem with Query!');
         } else {
             console.log('Successful Query!');
-            response.json({rows:rows});
-                      
+            response.json({status:'OK', rows:rows});    
         }
     })
 });
@@ -706,6 +705,69 @@ app.get('/api/removeTags/:username',function(request, response){
     })
     
 });
+
+//GetSpecifiv FriendGroup
+app.get('/api/getFriendGroup/:groupname', function(request, response){
+    const groupname = "'" + (request.params.groupname).substr(1) + "'"
+    const query = "SELECT * FROM `FriendGroup` WHERE group_name = " + groupname;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK', rows:rows});
+            
+            
+        }
+    })
+})
+
+//GetSpecifiv FriendGroup
+app.get('/api/getShared/:username/:groupname', function(request, response){
+    const username = "'" + (request.params.username).substr(1) + "'"
+    const groupname = "'" + (request.params.groupname).substr(1) + "'"
+    
+    const query = "SELECT * FROM `Share` WHERE group_name = " + groupname +" AND username = "+ username;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK', rows:rows});
+            
+            
+        }
+    })
+})
+
+//Get Specifi Content
+app.get('/api/getContent/:idx', function(request, response){
+    const idx = "'" + (request.params.idx).substr(1) + "'"
+    
+    const query = "SELECT * FROM `Content` WHERE id = " + groupname;
+
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK', rows:rows});
+            
+            
+        }
+    })
+})
+
+
+
 
 
 app.listen(5000);
