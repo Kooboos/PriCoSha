@@ -27,6 +27,7 @@ import { updatePendingTags } from '../Methods/updatePendingTag';
 import { toggleBanner } from '../Methods/toggleBanner';
 import { changeBannerColor } from '../Methods/changeBannerColor';
 import { getFriendGroup } from '../Methods/removeFriendGroupMethods/getFG';
+import { changePass } from '../Methods/changePassword';
 
 //TODO create line React Component
 //TODO create welcome message React Component which will render message with username
@@ -333,7 +334,17 @@ export class Home extends Component{
         }            
     }
 
-
+    changePasswordClicked(){
+        if(this.state.loggedIn){
+            const newPass = document.getElementById('passwordInput').value;
+            changePass(newPass, userDataMap.get(dataMapKeys.username)).then(response=>{
+                console.log('response  from pass change:', response);\
+                if(response.status === 'OK'){
+                    alert('Password has been changed. thank Santa Clause');
+                }
+            })
+        }            
+    }
 
     
     render(){
@@ -362,6 +373,10 @@ export class Home extends Component{
               </span>
               <span>
                   <button onClick={this.changebannerColor.bind(this)}>Change Banner Color</button>
+              </span>
+              <span>
+              <input id='passwordInput' type="password" placeholder="Enter New Password"/>
+                  <button onClick={this.changePasswordClicked.bind(this)}>Change Password</button>
               </span>
               <span>
                   <LoggedIn loggedIn={userDataMap.get(dataMapKeys.loginStatus)}/>

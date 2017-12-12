@@ -8,6 +8,11 @@ import { getShared } from '../Methods/removeFriendGroupMethods/getShared';
 import { queryFriendsFromGroup } from '../Methods/queryFriendsFromGroup';
 import { getMembers } from '../Methods/getMembers';
 import { getContent } from '../Methods/removeFriendGroupMethods/getContent';
+import { removeComments } from '../Methods/removeFriendGroupMethods/removeComments';
+import { removeTags } from '../Methods/removeFriendGroupMethods/removeTags';
+import { removeContent } from '../Methods/removeFriendGroupMethods/removeContent';
+import { removeShared } from '../Methods/removeFriendGroupMethods/removeShared';
+import { removeFg } from '../Methods/removeFriendGroupMethods/removeFG';
 
 export class OwnedFriendGroupDisplay extends Component{
     constructor(props){
@@ -127,7 +132,44 @@ export class OwnedFriendGroupDisplay extends Component{
                                     console.log('SharedResponse:', getSharedResponse);
                                     if(getSharedResponse.status === 'OK'){
                                         //need the ID from sharedResponse, use that to delete rows from Content table
-                                        getContent(getSharedResponse)
+                                        let allIDs=[];
+                                        for(let i = 0; i < getSharedResponse.rows.length; i++){
+                                            allIDs.push((getSharedResponse.rows[i].id).toString()); 
+                                        }
+                                        console.log('ppushingIDS:', allIDs);
+                                        getContent(allIDs).then(contentResponse=>{
+                                            console.log('contentResponse:', contentResponse);
+                                            //using contentResponse.id, remove all tags and all comments. then remove content
+                                            let allIDs=[];
+                                            for(let i = 0; i < contentResponse.rows.length; i++){
+                                                allIDs.push((contentResponse.rows[i].id).toString()); 
+                                            }
+                                            console.log('removing Comments:');
+                                            removeComments(allIDs).then(removeCommentsResponse=>{
+                                                if(removeCommentsResponse.status === 'OK'){
+                                                    console.log('removing tags');
+                                                    removeTags(allIDs).then(removeTagsResponse=>{
+                                                        if(removeTagsResponse.status === 'OK'){
+                                                            //remove Content based on contentResponse
+                                                            console.log('removingShared');
+                                                            removeShared(allIDs).then(removeSharedResponse=>{
+                                                                if(removeSharedResponse.status === 'OK'){
+                                                                    console.log('remomvingContent');
+                                                                    removeContent(allIDs).then(removeContentResponse=>{
+                                                                        if(removeContentResponse.status ==='OK'){
+                                                                            console.log('removingFG');
+                                                                            removeFg(groupName, userDataMap.get(dataMapKeys.username)).then(removeFGResponse=>{
+                                                                                console.log('removeFGResponse:', removeFGResponse);
+                                                                            })
+                                                                        }
+                                                                    })
+                                                                }
+                                                            })
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        })
                                     }
                                 })
                             }

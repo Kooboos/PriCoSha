@@ -4,6 +4,7 @@ import { removeGroup } from './removeFriendGroup';
 
 export const addFriendsToGroup = (groupName, userNames, creator) => new Promise((resolve, reject) => {
 
+    console.log('LOOKINGFORTHIS:', userNames);
     console.log('about to add Friends');
     const query = 'http://localhost:5000/api/addFriendToGroup/:' + groupName + '/:' + creator + '/:' + userNames;
     

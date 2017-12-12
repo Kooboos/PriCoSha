@@ -1,6 +1,6 @@
-export const getContent = (id) => new Promise((resolve, reject) => {
-    
-    const query = 'http://localhost:5000/api/getContent/:' + id;
+export const getContent = (ids) => new Promise((resolve, reject) => {
+    console.log('ids:', ids);
+    const query = 'http://localhost:5000/api/getContent/:' + ids;
 
     fetch(query, {
         mode: "cors",

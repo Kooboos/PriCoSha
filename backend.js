@@ -746,12 +746,24 @@ app.get('/api/getShared/:username/:groupname', function(request, response){
     })
 })
 
-//Get Specifi Content
-app.get('/api/getContent/:idx', function(request, response){
-    const idx = "'" + (request.params.idx).substr(1) + "'"
-    
-    const query = "SELECT * FROM `Content` WHERE id = " + groupname;
+//Get Content given array of ID's
+app.get('/api/getContent/:ids', function(request, response){
+    const ids = request.params.ids.split(',');
+    console.log('allIDS:', ids);
+    let allID = '(';
+    for(let i=0; i< ids.length; i++){
+        if(i === 0){
+            allID = allID + ids[i].substr(1) + ', ';
+        }
+        else{
+            allID = allID + ids[i] + ', ';    
+        }
+    }
 
+    let allValues = allID.substring(0, allID.length -2);
+    const query = "SELECT * FROM `Content` WHERE id IN " + allValues + ')';
+
+    console.log('allContentQuery------', query);
     connection.query(query,
     function(error, rows, fields){
         if(error){
@@ -767,7 +779,181 @@ app.get('/api/getContent/:idx', function(request, response){
 })
 
 
+//Remove comments given array of IDS
+app.get('/api/removeComments/:ids', function(request, response){
+    const ids = request.params.ids.split(',');
+    console.log('allIDS:', ids);
+    let allID = '(';
+    for(let i=0; i< ids.length; i++){
+        if(i === 0){
+            allID = allID + ids[i].substr(1) + ', ';
+        }
+        else{
+            allID = allID + ids[i] + ', ';    
+        }
+    }
+
+    let allValues = allID.substring(0, allID.length -2);
+
+    const query = "DELETE FROM `Comment` WHERE id IN " + allValues + ')';
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
+
+//Remove tags given array of IDS
+app.get('/api/removeTagsID/:ids', function(request, response){
+    const ids = request.params.ids.split(',');
+    console.log('allIDS:', ids);
+    let allID = '(';
+    for(let i=0; i< ids.length; i++){
+        if(i === 0){
+            allID = allID + ids[i].substr(1) + ', ';
+        }
+        else{
+            allID = allID + ids[i] + ', ';    
+        }
+    }
+
+    let allValues = allID.substring(0, allID.length -2);
+
+    const query = "DELETE FROM `Tag` WHERE id IN " + allValues + ')';
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
+
+//Remove tags given array of IDS
+app.get('/api/removeContent/:ids', function(request, response){
+    const ids = request.params.ids.split(',');
+    console.log('allIDS:', ids);
+    let allID = '(';
+    for(let i=0; i< ids.length; i++){
+        if(i === 0){
+            allID = allID + ids[i].substr(1) + ', ';
+        }
+        else{
+            allID = allID + ids[i] + ', ';    
+        }
+    }
+
+    let allValues = allID.substring(0, allID.length -2);
+
+    const query = "DELETE FROM `Content` WHERE id IN " + allValues + ')';
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
+
+//Remove tags given array of IDS
+app.get('/api/removeShared/:ids', function(request, response){
+    const ids = request.params.ids.split(',');
+    console.log('allIDS:', ids);
+    let allID = '(';
+    for(let i=0; i< ids.length; i++){
+        if(i === 0){
+            allID = allID + ids[i].substr(1) + ', ';
+        }
+        else{
+            allID = allID + ids[i] + ', ';    
+        }
+    }
+
+    let allValues = allID.substring(0, allID.length -2);
+
+    const query = "DELETE FROM `Share` WHERE id IN " + allValues + ')';
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
 
 
+//Remove tags given array of IDS
+app.get('/api/removefg/:groupname/:username', function(request, response){
+    const groupname = "'" + (request.params.groupname).substr(1) + "'";
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "DELETE FROM `FriendGroup` WHERE group_name = " + groupname + 'AND username = '+ username;
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
+
+//Change Pass
+app.get('/api/changePass/:password/:username', function(request, response){
+    const password = "'" + (request.params.password).substr(1) + "'";
+    const username = "'" + (request.params.username).substr(1) + "'";
+    
+    const query = "Update Person SET password = "+ password + " Where username = "+ username;
+
+    console.log('allContentQuery------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
 
 app.listen(5000);
