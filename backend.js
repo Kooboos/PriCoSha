@@ -956,4 +956,25 @@ app.get('/api/changePass/:password/:username', function(request, response){
     })
 })
 
+//remove Members
+app.get('/api/removeMembers/:groupname', function(request, response){
+    const groupname = "'" + (request.params.groupname).substr(1) + "'";
+    
+    const query = "Delete From `Member` Where group_name = "+ groupname;
+
+    console.log('removeMembers------', query);
+    connection.query(query,
+    function(error, rows, fields){
+        if(error){
+            console.log(error);
+            console.log('Problem with Query!');
+        } else {
+            console.log('Successful Query!');
+            response.json({status:'OK'});
+            
+            
+        }
+    })
+})
+
 app.listen(5000);

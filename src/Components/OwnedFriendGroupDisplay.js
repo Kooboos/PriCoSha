@@ -13,6 +13,7 @@ import { removeTags } from '../Methods/removeFriendGroupMethods/removeTags';
 import { removeContent } from '../Methods/removeFriendGroupMethods/removeContent';
 import { removeShared } from '../Methods/removeFriendGroupMethods/removeShared';
 import { removeFg } from '../Methods/removeFriendGroupMethods/removeFG';
+import { removeMembersz } from '../Methods/removeFriendGroupMethods/removeMembers';
 
 export class OwnedFriendGroupDisplay extends Component{
     constructor(props){
@@ -155,14 +156,19 @@ export class OwnedFriendGroupDisplay extends Component{
                                                             removeShared(allIDs).then(removeSharedResponse=>{
                                                                 if(removeSharedResponse.status === 'OK'){
                                                                     console.log('remomvingContent');
-                                                                    removeContent(allIDs).then(removeContentResponse=>{
-                                                                        if(removeContentResponse.status ==='OK'){
-                                                                            console.log('removingFG');
-                                                                            removeFg(groupName, userDataMap.get(dataMapKeys.username)).then(removeFGResponse=>{
-                                                                                console.log('removeFGResponse:', removeFGResponse);
+                                                                    removeMembersz(groupName).then(delMemberResponse =>{
+                                                                        if(delMemberResponse.status === 'OK'){
+                                                                            removeContent(allIDs).then(removeContentResponse=>{
+                                                                                if(removeContentResponse.status ==='OK'){
+                                                                                    console.log('removingFG');
+                                                                                    removeFg(groupName, userDataMap.get(dataMapKeys.username)).then(removeFGResponse=>{
+                                                                                        console.log('removeFGResponse:', removeFGResponse);
+                                                                                    })
+                                                                                }
                                                                             })
                                                                         }
                                                                     })
+                                                                    
                                                                 }
                                                             })
                                                         }

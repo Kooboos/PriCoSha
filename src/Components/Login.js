@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {userDataMap, dataMapKeys} from './UserDataMap.js';
 import { Route, Redirect } from 'react-router'
-var hash = require('hash.js')
+var md5 = require('md5');
 
 export class Login extends Component{
     constructor(props){
@@ -19,7 +19,7 @@ export class Login extends Component{
         
         //use this following line when database gets modified to account for hashed values.
         const passwordVal = document.getElementById('passwordInput').value;
-        const password = hash.sha256().update(passwordVal).digest('hex');
+        const password = md5(passwordVal);
         console.log('user:', username);
         console.log('pass:', password);
 

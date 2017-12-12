@@ -8,7 +8,7 @@ import { removeTags } from '../Methods/removeTags';
 import { removeMeFromShare } from '../Methods/removeMeFromShare';
 import { removeMeFromComments } from '../Methods/removeMeFromComments';
 import { removeMeFromContent } from '../Methods/removeMeFromContent';
-var hash = require('hash.js')
+var md5 = require('md5');
 
 
 export class RemoveAccount extends Component{
@@ -27,7 +27,7 @@ export class RemoveAccount extends Component{
         const passwordVal = document.getElementById('passwordInput').value;
         const firstName = document.getElementById('fnameInput').value;
         const lastName = document.getElementById('lnameInput').value;
-        const password = hash.sha256().update(passwordVal).digest('hex');
+        const password = md5(passwordVal);
         console.log('first log');
 
         removeTags(username).then(response=>{

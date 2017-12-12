@@ -338,7 +338,7 @@ export class Home extends Component{
         if(this.state.loggedIn){
             const newPass = document.getElementById('passwordInput').value;
             changePass(newPass, userDataMap.get(dataMapKeys.username)).then(response=>{
-                console.log('response  from pass change:', response);\
+                console.log('response  from pass change:', response);
                 if(response.status === 'OK'){
                     alert('Password has been changed. thank Santa Clause');
                 }
